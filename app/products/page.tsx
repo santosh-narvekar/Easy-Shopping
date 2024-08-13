@@ -7,7 +7,7 @@ import LoadingCards from "@/components/card/LoadingCards";
 function HomePage({searchParams}:{searchParams:{category?:string,search?:string,layout?:'grid'|'list'}}){
   
   return <section className=" w-full ">
-      <Categories  />
+      <Categories layout={searchParams?.layout}  />
       <div>
         <Suspense fallback={<LoadingCards />}>
           <ProductContainer category={searchParams.category} search={searchParams.search} layout={searchParams.layout}  />
