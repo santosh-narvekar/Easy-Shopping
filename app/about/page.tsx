@@ -23,7 +23,7 @@ async function AboutPage(){
 
       <FormWrapper action={updateProfileAction}>
         {
-          profile?.image?<Image src={profile.image} alt={profile.name} width={100} height={100}  className='rounded object-cover mb-4 w-24 h-24' /> : userIcon
+          profile?.image?<Image src={profile.image} alt={profile.firstName} width={100} height={100}  className='rounded object-cover mb-4 w-24 h-24' /> : userIcon
         }
 
         <div className="mb-2">
