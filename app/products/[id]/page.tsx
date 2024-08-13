@@ -76,7 +76,7 @@ async function ProductDetailsPage({params}:{params:{id:string}}){
 
 
          getReviews.length > 0 &&  <section className="w-full mt-8">
-          <p className="text-2xl font-bold text-primary my-2"> Product Reviews </p>
+          <p className="text-2xl font-bold my-2"> Product Reviews </p>
          <div className="grid md:grid-cols-2 gap-8 border-t-[1px] py-8  border-t-muted">
         {
           getReviews.map((review)=>{

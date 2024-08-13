@@ -12,11 +12,10 @@ function LoadingCards() {
 }
 export function SkeletonCard(){
   return (
-    <div>
-    <Skeleton className='h-[300px] rounded-md' />
-    <Skeleton className='h-4 mt-2 w-3/4'/>
-    <Skeleton className='h-4 mt-2 w-1/2'/>
-    </div>
+    <Skeleton className='h-full  rounded-md p-2' >
+      <Skeleton className='h-[200px] md:h-[300px] w-full'/>
+    </Skeleton>
+  
   )
 }
 export default LoadingCards

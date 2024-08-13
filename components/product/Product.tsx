@@ -9,13 +9,13 @@ import ProductRating from "./ProductRating"
 function Product({list,product}:{list:boolean,product:ProductCardProps}){
   const {id,product:name,productDesc,productPrice,productQuantity,image,company}=product;
   return (
-    <article  className={`relative w-full  h-full border-[2px] group rounded-md px-2 py-2`}>
+    <article  className={`relative w-full h-full border-[2px] group rounded-md px-2 py-2`}>
       
       <Link href={`/products/${id}`} className={`${list && 'grid grid-cols-[0fr,auto] gap-2'} `}>
 
          <div className={`relative h-[200px] md:h-[300px]  ${list && 'w-[120px] sm:w-[200px] h-[100px] md:w-[300px]  '}  mb-2 overflow-hidden  rounded-md  `}>
 
-          <Image src={image} fill alt="product image" className="rounded-md object-cover transform group-hover:scale-110 transition-transform duration-500 " />
+          <Image src={image} fill alt="product image" className = " rounded-md object-cover transform group-hover:scale-110 transition-transform duration-500 " />
 
          </div>
 

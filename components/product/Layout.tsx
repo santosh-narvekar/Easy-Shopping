@@ -22,7 +22,7 @@ function Layout({productsLength}:{productsLength:number}){
   return (
     
        <div className="flex items-center justify-between mx-8 mt-4 py-4 gap-3 ">
-        <p className="text-primary text-lg">{productsLength} Product{productsLength > 1 && 's'}</p>
+        <p className=" text-lg">{productsLength} Product{productsLength > 1 && 's'}</p>
         <div className="flex items-center gap-2">
 
         <LuLayoutGrid size={35} className={` hover:bg-blue-400  ${params.get('layout')=='grid' && 'bg-blue-400'} transition-all px-2 py-2 hover:cursor-pointer rounded-md `} 

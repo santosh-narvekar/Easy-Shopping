@@ -22,7 +22,7 @@ type AddToCartButtonProps = {
 
 export const SubmitButton = ({text,className}:ButtonProps) => {
   const {pending} = useFormStatus();  
-  return <Button disabled={pending} type="submit" variant={'default'} className={` capitalize text-primary ${className} `}>
+  return <Button disabled={pending} type="submit" variant={'default'} className={` capitalize  ${className} `}>
     {
         pending?<>
         <ReloadIcon className="pr-2 h-4 w-4 rotate-continuous " />
