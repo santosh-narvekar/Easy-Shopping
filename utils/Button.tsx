@@ -77,7 +77,7 @@ export const ProductCartButton = ({isAddedToCart}:{isAddedToCart:boolean}) => {
 
 type actionType = 'edit' | 'delete'
 
-export const IconButton = ({actionType}:{actionType:actionType})=>{
+export const IconButton = ({actionType,className}:{actionType:actionType,className?:string})=>{
   const {pending} = useFormStatus();
 
   const renderIcon = () =>{
@@ -92,7 +92,7 @@ export const IconButton = ({actionType}:{actionType:actionType})=>{
     }
   };
 
- return <Button type="submit" size='icon' variant='link' className="p-2 cursor-pointer">
+ return <Button type="submit" size='icon' variant='link' className={`p-2 cursor-pointer ${className}`}>
   {pending ? <ReloadIcon className="rotate-continuous" /> : renderIcon()}
  </Button>
 }

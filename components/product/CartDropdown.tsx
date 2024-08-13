@@ -14,7 +14,7 @@ function CartDropdown({productQuantity,price = 0,cartId}:{productQuantity:number
   const {selectedQuantity} = useCart( state => state );
   
 
-  const handleSelected=(value:number)=>{
+  const handleSelected = (value:number)=>{
     useCart.setState({
       selectedQuantity:value,
       price:price * value

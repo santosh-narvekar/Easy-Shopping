@@ -54,7 +54,6 @@ export const POST = async(req:NextRequest,res:NextResponse) => {
           currency:'inr',
           product_data:{
             name:`${products.map(prod => prod.product.product.toString())}`,
-            images:products.map(prod=>prod.product.image),
           },
         unit_amount:Number((orderTotal * 100/ItemsIncluded).toFixed())+ 1 
         //unit_amount:orderTotal * 100

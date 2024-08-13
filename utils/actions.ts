@@ -204,7 +204,8 @@ export const fetchProducts = async({search='',category}:{
       OR:[
         {product:{contains:search,mode:'insensitive'}},
         {company:{contains:search,mode:'insensitive'}},
-        {productDesc:{contains:search,mode:'insensitive'}}
+        {productDesc:{contains:search,mode:'insensitive'}},
+        {productPrice:{equals:Number(search)}}
       ]
     },
     select:{
@@ -449,7 +450,9 @@ export const fetchReviewsOnProduct = async(productId:string) => {
       profile:{
         select:{
           image:true,
-          username:true
+          username:true,
+          firstName:true,
+          lastName:true
         }
       }
     },
@@ -550,8 +553,54 @@ export const fetchMyOrders = async(profileId:string) => {
 
 export const fetchAllOrders = async() =>{
   return await db.order.findMany({
+    where:{
+      paymentStatus:true
+    },
     include:{
-      profile:true
+      profile:{
+        select:{
+          image:true,
+          firstName:true,
+          lastName:true,
+          address:true
+        }
+      }
     }
   })
+}
+
+export const updateOrder = async(prevState:{id:string,deliveryStatus:boolean}):Promise<{message:string}> =>{
+  await getAdminUser();
+  const {id,deliveryStatus} = prevState
+  try{
+    await db.order.update({
+      where:{
+        id
+      },
+      data:{
+        deliveryStatus:!deliveryStatus
+      }
+    })
+    revalidatePath(`/admin?selected=manageOrders`)
+    return {message:`order with order id ${id} successfully updated`}
+  }catch(error){
+    return renderError(error);
+  }
+}
+
+export const deleteOrder = async(prevState:{id:string}):Promise<{message:string}> => {
+ await getAdminUser();
+ const {id} = prevState;
+  try{
+    await db.order.delete({
+      where:{
+        id
+      }
+    })
+
+    revalidatePath(`/admin?selected=manageOrders`)
+    return {message:`Order with order id ${id} successfully deleted`}
+  }catch(error){
+    return renderError(error);
+  }
 }

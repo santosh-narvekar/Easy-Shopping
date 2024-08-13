@@ -1,7 +1,7 @@
 import Image from "next/image"
 import hero1 from '@/assets/hero1.jpg'
 import Link from "next/link"
-import FavoriteToggleButton from "../card/FavoriteToggleButton"
+import FavoriteToggleButton from "../product/FavoriteToggleButton"
 import { type ProductCardProps } from "@/utils/types"
 import { formatCurrency } from "@/utils/format"
 import ProductRating from "./ProductRating"
@@ -22,7 +22,7 @@ function Product({list,product}:{list:boolean,product:ProductCardProps}){
          <div className={`flex flex-col ${list?'items-start px-4 mt-1 ':'items-center'} justify-center   gap-2 flex-wrap `}>
           {list && <p className="capitalize text-sm font-bold">From {company}</p>}
           <div className={`flex flex-col ${!list && 'items-center'}`}>
-            <p className="text-md md:text-4xl  font-bold">{name}</p>
+            <p className="text-md md:text-4xl  font-bold">{name.split(' ').length > 2?name.split(' ').slice(0,1).join('').concat('...'):name}</p>
             <p className="font-normal text-sm md:text-md">{formatCurrency(productPrice)}</p>
           </div>
           {list && <ProductRating inPage={false} id={id} />}

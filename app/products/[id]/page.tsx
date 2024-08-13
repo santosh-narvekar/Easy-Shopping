@@ -1,4 +1,4 @@
-import FavoriteToggleButton from "@/components/card/FavoriteToggleButton";
+import FavoriteToggleButton from "@/components/product/FavoriteToggleButton";
 import BreadCrumb from "@/components/product/BreadCrumb";
 import CartDropdown from "@/components/product/CartDropdown";
 import CartToggleButton from "@/components/product/CartToggleButton"

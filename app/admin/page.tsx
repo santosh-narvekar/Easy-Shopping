@@ -19,17 +19,17 @@ async function AdminPage({searchParams}:{searchParams:{id?:string,selected?:stri
   if(searchParams?.id) formData = await fetchProductDetails(searchParams.id!)
   const allOrders = await fetchAllOrders(); 
   return (
-    <main className="grid md:grid-cols-[0.1fr,auto] gap-4 px-8 md:px-16 py-8">
-
-      <aside className="flex flex-col items-center  py-1 w-full gap-2">
+    <main className={` grid md:grid-cols-[0.1fr,auto] gap-4 px-4 lg:px-16 py-8 `}>
+      <aside className=" flex flex-col items-center  py-1 w-full gap-2 ">
         <p>YOUR ACTIONS</p>
-        <Link className="w-full" href={'/admin'}>
-        <Button  className="w-full" >Create New Product</Button>
+        <Link className="md:w-full" href={'/admin'}>
+        <Button  className="md:w-full">Create New Product</Button>
         </Link>
-        <Link className="w-full" href={`/admin?selected=manageOrders`}  >
-        <Button  className="w-full" >Manage All Orders</Button>
+        <Link className="md:w-full" href={`/admin?selected=manageOrders`}  >
+        <Button className="md:w-full">Manage All Orders</Button>
         </Link>
       </aside>
+
       {
         !searchParams?.selected &&  <CreateProduct searchParams={searchParams} formData={formData}/>
       }

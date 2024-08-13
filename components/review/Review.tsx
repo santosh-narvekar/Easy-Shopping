@@ -11,7 +11,9 @@ type ReviewCardProps={
   profileId:string
   profile:{
     image:string,
-    username:string
+    username:string,
+    firstName:string,
+    lastName:string
   }
   rating:number,
   review:string,
@@ -19,7 +21,7 @@ type ReviewCardProps={
 
 function Review({review,children}:{review:ReviewCardProps,children?:React.ReactNode}){
   const {id,rating,review:comment} = review;
-  const {image,username} = review.profile;
+  const {image,username,firstName,lastName} = review.profile;
   const [longTextDisplayed,setIsLongTextDisplayed] = useState(false);
  
   const stars = Array.from({length:5},(_,i)=>{
@@ -47,7 +49,7 @@ function Review({review,children}:{review:ReviewCardProps,children?:React.ReactN
             })
           }
          </p>
-         <p className="text-sm ">{username}</p>
+         <p className="text-sm ">{firstName} {lastName}</p>
         </div>
       </div>
 
