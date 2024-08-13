@@ -14,15 +14,20 @@ type CartItemProps = {
 }
 
 function CartContainer({cartItems}:{cartItems:CartItemProps[]}){
-  
-  useEffect(()=>{
+   const {TotalPrice} = useCart(state => state);
+   let subTotal:number = 0; 
+
+   useEffect(()=>{
     useCart.setState({
       ItemsInCart:0,
-      TotalPrice:cartItems.reduce((acc,cartItem)=>{
-        return cartItem.price + acc
+      TotalPrice:cartItems.reduce((_,currentItem)=>{
+        subTotal = subTotal + currentItem.price;
+        return subTotal;
       },0)
-     })
+    })
   },[cartItems.length])
+
+
 
   return (
     <section className="grid lg:grid-cols-[7fr,3fr] gap-4 w-full  my-4 ">
