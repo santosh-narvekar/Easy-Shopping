@@ -52,7 +52,7 @@ export const CardSignInButton = () =>{
 
 export const ProductSignInButton = () =>{
   return <SignInButton mode="modal">
-    <Button type='button' size={'lg'} variant='outline' className="px-2 py-1 text-primary  hover:cursor-pointer bg-[#3333ff] hover:bg-[#1a1aff]  " asChild>
+    <Button type='button' size={'lg'} variant='outline' className="px-2 py-1 hover:cursor-pointer bg-[#3333ff] hover:bg-[#1a1aff]  " asChild>
       <p>Sign In To Add To Cart</p>
     </Button>
   </SignInButton>
