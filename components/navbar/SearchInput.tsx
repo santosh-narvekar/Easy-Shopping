@@ -33,7 +33,7 @@ function SearchInput() {
   },[searchParams.get('search')])
 
   return (
-       <Input placeholder="Type Product name,company or price..." className="max-w-xs  md:my-0 my-2 input"  
+       <Input placeholder="Type Product name,company or price..." className="max-w-xs self-center  md:my-0 my-2 input"  
        value={search}
        onChange={(e)=>{
         setSearch(e.target.value);
