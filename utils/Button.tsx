@@ -92,7 +92,7 @@ export const IconButton = ({actionType,className}:{actionType:actionType,classNa
     }
   };
 
- return <Button type="submit" size='icon' variant='link' className={`p-2 cursor-pointer ${className}`}>
+ return <Button disabled={pending} type="submit" size='icon' variant='link' className={`p-2 cursor-pointer ${className}`}>
   {pending ? <ReloadIcon className="rotate-continuous" /> : renderIcon()}
  </Button>
 }
