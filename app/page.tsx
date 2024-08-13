@@ -78,8 +78,8 @@ export default function Home() {
 const GridComponent = (text:string) =>{
   return <div className='flex items-center gap-3'>
       <div className='flex items-center gap-3'>
-            <FaHandPointRight className='text-primary rounded-full w-6 h-6 md:px-1 md:py-1 ' />
-            <p className='text-2xl text-muted-foreground'>{text}</p>
+            <FaHandPointRight className='text-primary rounded-full w-5 h-5 md:w-6 md:h-6 md:px-1 md:py-1 ' />
+            <p className='md:text-2xl text-muted-foreground'>{text}</p>
       </div>
     </div>
 }

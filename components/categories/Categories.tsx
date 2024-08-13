@@ -10,7 +10,7 @@ function Categories(){
       /*<h3 className="text-2xl   font-bold leading-loose text-primary w-full text-center"> TAKE A  LOOK AT OUR TOP CATEGORIES... </h3>
        */
      }
-     <div className="flex items-center md:flex-nowrap flex-wrap gap-4 md:justify-between px-4 md:px-16  py-4 ">
+     <div className="flex items-center md:flex-nowrap flex-wrap gap-4 md:justify-between px-8 md:px-16  py-4 ">
         {
           categories.map((category)=>{
             return <Link href={`/products/?category=${category.label}`} key={category.label} className="group">
