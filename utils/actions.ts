@@ -1,4 +1,4 @@
-'use server'
+u'use server'
 
 import { clerkClient,currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -204,8 +204,7 @@ export const fetchProducts = async({search='',category}:{
       OR:[
         {product:{contains:search,mode:'insensitive'}},
         {company:{contains:search,mode:'insensitive'}},
-        {productDesc:{contains:search,mode:'insensitive'}},
-        {productPrice:{equals:Number(search)}}
+        {productDesc:{contains:search,mode:'insensitive'}}
       ]
     },
     select:{
