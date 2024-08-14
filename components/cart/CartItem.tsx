@@ -14,7 +14,6 @@ import CartDropdown from "../product/CartDropdown";
 
 function CartItem({product,selectedQuantity,cartId,price}:{product:ProductCardProps,selectedQuantity:number,cartId:string,price:number}){
   const {id,image,product:productName,productPrice,productQuantity,company,category} = product;
-  const {price:prodPrice} = useCart(state => state);
   const pathname = usePathname();
   
   const toggleCartAction = toggleCart.bind(null,{
@@ -36,8 +35,7 @@ function CartItem({product,selectedQuantity,cartId,price}:{product:ProductCardPr
           <p className="text-md md:text-lg font-bold ">{productName}</p>
           <p className="text-sm text-semibold">from: {company}</p>
           <p className="">category: {category}</p>
-          <p className="font-bold text-md mt-1">Total({selectedQuantity} items): {formatCurrency((prodPrice || productPrice ) * selectedQuantity)}</p>
-          <CartDropdown productQuantity={productQuantity} price={price} defaultValue={selectedQuantity} />
+          <p className="font-bold text-md mt-1">Total({selectedQuantity} items): {formatCurrency(productPrice  * selectedQuantity)}</p>
         </div>
       </div>
       </Link>

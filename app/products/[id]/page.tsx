@@ -64,16 +64,7 @@ async function ProductDetailsPage({params}:{params:{id:string}}){
           <p className=" text-md font-normal px-2 py-1 w-max rounded-md bg-[#3333ff] text-white">{formatCurrency(productPrice)}</p>
           <div className = " flex items-end  gap-8 ">
           <CartDropdown productQuantity = {productQuantity} price = {productPrice} cartId={cartId} />
-          {
-           !cartId ? <CartToggleButton productId = {id} price={productPrice} />
-          :<Link href={'/cart'}>
-            <Button  variant={'outline'} className="p-2 hover:cursor-pointer w-20 bg-[#3333ff] text-primary font-semibold hover:bg-[#1a1aff] transition-all capitalize">
-              <p className="font-bold text-white">
-                   Go To Cart
-             </p>
-            </Button> 
-          </Link>
-          }
+          <CartToggleButton productId = {id} price={productPrice} />
             </div>
         </article>
       </section>
