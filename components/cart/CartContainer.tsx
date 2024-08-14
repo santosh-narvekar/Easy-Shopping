@@ -14,7 +14,7 @@ type CartItemProps = {
 }
 
 function CartContainer({cartItems}:{cartItems:CartItemProps[]}){
-   const {TotalPrice} = useCart(state => state);
+   const {TotalPrice,selectedQuantity} = useCart(state => state);
    let subTotal:number = 0; 
 
    useEffect(()=>{
@@ -23,9 +23,10 @@ function CartContainer({cartItems}:{cartItems:CartItemProps[]}){
       TotalPrice:cartItems.reduce((_,currentItem)=>{
         subTotal = subTotal + currentItem.price;
         return subTotal;
-      },0)
+      },0),
+      selectedQuantity:selectedQuantity,
     })
-  },[cartItems.length])
+  },[cartItems.length,selectedQuantity])
 
 
 

@@ -9,7 +9,7 @@ import {
 } from '../ui/select';
 import { useCart } from '@/utils/store';
 
-function CartDropdown({productQuantity,price = 0,cartId}:{productQuantity:number,price:number,cartId?:string | null}){
+function CartDropdown({productQuantity,price = 0,cartId,defaultValue}:{productQuantity:number,price:number,cartId?:string | null,defaultValue?:number}){
 
   const {selectedQuantity} = useCart( state => state );
   
@@ -29,8 +29,8 @@ function CartDropdown({productQuantity,price = 0,cartId}:{productQuantity:number
   return <div className = ' flex flex-col gap-[1px] ' >
   <h4> Quantity : </h4>
   <Select disabled={cartId ? true : false }  onValueChange={(value) => handleSelected(Number(value))}>
-    <SelectTrigger className='w-[90px]' defaultValue={selectedQuantity?.toString()} >
-          <SelectValue placeholder={selectedQuantity} />
+    <SelectTrigger className='w-[90px]' defaultValue={defaultValue?.toString() || selectedQuantity?.toString()} >
+          <SelectValue placeholder={defaultValue || selectedQuantity} />
     </SelectTrigger>
 
     <SelectContent>
