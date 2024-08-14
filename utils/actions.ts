@@ -543,7 +543,8 @@ export const createOrderAction = async(prevState:{subTotal:number}) =>{
 export const fetchMyOrders = async(profileId:string) => {
   return await db.order.findMany({
     where:{
-      profileId
+      profileId,
+      paymentStatus:true
     },
     include:{
       profile:true,
