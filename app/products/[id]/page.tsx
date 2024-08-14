@@ -65,7 +65,7 @@ async function ProductDetailsPage({params}:{params:{id:string}}){
           <div className = " flex items-end  gap-8 ">
           <CartDropdown productQuantity = {productQuantity} price = {productPrice} cartId={cartId} />
           <CartToggleButton productId = {id} price={productPrice} />
-            </div>
+         </div>
         </article>
       </section>
 
