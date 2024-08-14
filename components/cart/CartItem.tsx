@@ -10,6 +10,7 @@ import FormWrapper from "../form/FormWrapper";
 import { toggleCart } from "@/utils/actions";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import CartDropdown from "../product/CartDropdown";
 
 function CartItem({product,selectedQuantity,cartId,price}:{product:ProductCardProps,selectedQuantity:number,cartId:string,price:number}){
   const {id,image,product:productName,productPrice,productQuantity,company,category} = product;
@@ -35,6 +36,7 @@ function CartItem({product,selectedQuantity,cartId,price}:{product:ProductCardPr
           <p className="text-sm text-semibold">from: {company}</p>
           <p className="">category: {category}</p>
           <p className="font-bold text-md mt-1">Total({selectedQuantity} items): {formatCurrency(productPrice * selectedQuantity)}</p>
+          <CartDropdown productQuantity={productQuantity} price={price} />
         </div>
       </div>
       </Link>

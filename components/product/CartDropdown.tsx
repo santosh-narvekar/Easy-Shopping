@@ -9,7 +9,7 @@ import {
 } from '../ui/select';
 import { useCart } from '@/utils/store';
 
-function CartDropdown({productQuantity,price = 0,cartId}:{productQuantity:number,price:number,cartId:string | null}){
+function CartDropdown({productQuantity,price = 0,cartId}:{productQuantity:number,price:number,cartId?:string | null}){
 
   const {selectedQuantity} = useCart( state => state );
   
