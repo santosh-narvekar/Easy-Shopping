@@ -41,7 +41,10 @@ export type ReviewCardProps = {
     username:string,
     firstName:string,
     lastName:string
-  }
+  },
+  product?:{
+    image:string
+  },
   rating:number,
   review:string,
 }

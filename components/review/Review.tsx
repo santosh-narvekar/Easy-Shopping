@@ -9,6 +9,7 @@ import { type ReviewCardProps } from "@/utils/types";
 function Review({review,children}:{review:ReviewCardProps,children?:React.ReactNode}){
   const {rating,review:comment} = review;
   const {image,firstName,lastName} = review.profile;
+
   const [longTextDisplayed,setIsLongTextDisplayed] = useState(false);
  
   const stars = Array.from({length:5},(_,i)=>{
@@ -27,7 +28,7 @@ function Review({review,children}:{review:ReviewCardProps,children?:React.ReactN
     <Card className="w-full  relative p-4 ">
       
       <div className="flex items-center gap-3 px-4 py-2">
-        <Image alt={'user image'} sizes={'50px'} src={image} className="rounded-full" width={50} height={50} />
+        <Image alt={'user image'} sizes={'50px'} src={review?.product?.image || image} className="rounded-full" width={50} height={50} />
         <div className="flex flex-col justify-start gap-1">
          <p className="flex items-center ">
           {

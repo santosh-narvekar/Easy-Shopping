@@ -389,7 +389,12 @@ export const fetchMyReviews = async(profileId:string)=>{
       profileId
     },
     include:{
-      profile:true
+      profile:true,
+      product:{
+        select:{
+          image:true
+        }
+      }
     }
   })
 }
