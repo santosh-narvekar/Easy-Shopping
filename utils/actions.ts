@@ -642,8 +642,8 @@ export const updateOrder = async(prevState:{id:string,deliveryStatus:boolean}):P
       }
     })
 
+    revalidatePath(`/admin?selected=manageOrders`)
     return {message:`order updated successfully!`}
-
   }catch(err){
     return renderError(err);
   }
