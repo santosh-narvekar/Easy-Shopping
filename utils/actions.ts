@@ -197,6 +197,7 @@ export const fetchProducts = async({search='',category}:{
         {product:{contains:search,mode:'insensitive'}},
         {company:{contains:search,mode:'insensitive'}},
         {productDesc:{contains:search,mode:'insensitive'}},
+        {productPrice:{equals:Number(search)}}
       ]
     },
     select:{
@@ -601,7 +602,8 @@ export const fetchMyOrders = async(profileId:string) => {
   
   return await db.order.findMany({
     where:{
-      profileId
+      profileId,
+      paymentStatus:true
     },
     include:{
       profile:true,
