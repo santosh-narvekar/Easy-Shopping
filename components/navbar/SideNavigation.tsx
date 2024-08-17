@@ -11,7 +11,7 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 
 function SideNavigation() {
-  const {userId}=auth();
+  const {userId} = auth();
   const isAdminUser = userId === process.env.ADMIN_USER_ID;
 
   return (

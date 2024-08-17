@@ -5,13 +5,13 @@ import { useToast } from '../ui/use-toast';
 
 function SignOutLink() {
   const { toast } = useToast();
-  // const handleLogout = () => {
-   // toast({ description: 'You have been signed out.' });
-  //};
+  const handleLogout = () => {
+    toast({ description: 'You have been logged out.' });
+  };
 
   return (
-    <SignOutButton redirectUrl='/'>
-      <button className='w-full text-left' >
+    <SignOutButton redirectUrl='/' >
+      <button onClick={handleLogout} className='w-full text-left' >
         Logout
       </button>
     </SignOutButton>

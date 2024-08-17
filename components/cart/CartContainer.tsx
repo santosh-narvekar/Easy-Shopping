@@ -1,38 +1,43 @@
 'use client'
-
-import { useEffect } from "react";
-import { useCart } from "@/utils/store";
 import { ProductCardProps } from "@/utils/types";
 import CartItem from "./CartItem";
 import CartCheckoutWrapper from "./CartCheckoutWrapper";
-
-type CartItemProps = {
-  product:ProductCardProps,
-  id:string
-  selectedQuantity:number,
-  price:number,
-}
+import { useEffect } from "react";
+import { calculateTotals } from "@/utils/actions";
+import { useCart } from "@/utils/store";
+import { type CartItemProps } from "@/utils/types";
 
 function CartContainer({cartItems}:{cartItems:CartItemProps[]}){
-   let subTotal:number = 0; 
 
-   useEffect(()=>{
+  useEffect(()=>{
     useCart.setState({
-      ItemsInCart:0,
-      TotalPrice:cartItems.reduce((_,currentItem)=>{
-        subTotal = subTotal + currentItem.price;
-        return subTotal;
-      },0),
+      NoOfItemsInCart:0
     })
-  },[cartItems.length])
+  },[]);
 
+  useEffect(()=>{
+      const calculate=async()=>{
+        let cartData = await calculateTotals();
+        if(cartData){
+        const {totalPrice,orderTotal,tax,deliveryCharge} = cartData;
+        useCart.setState({
+          subTotal:totalPrice,
+          tax:tax ,
+          TotalPrice:orderTotal,
+          deliveryCharge:deliveryCharge 
+        });
+      }
+      }
+     calculate()
+  },[cartItems,cartItems.length])
 
   return (
     <section className="grid lg:grid-cols-[7fr,3fr] gap-4 w-full  my-4 ">
       <div className="flex flex-col">
       {
         cartItems.map((cartItem)=>{
-          return <CartItem key={cartItem.product.id} selectedQuantity={cartItem.selectedQuantity} cartId={cartItem.id} product={cartItem.product} price={cartItem.price}  />
+          const {id:cartId,profileId,productId,price,noOfItemsSelected} = cartItem;
+          return <CartItem key={cartId} cartId={cartId} productId={productId} profileId={profileId} price={price} noOfItemsSelected={noOfItemsSelected} Product={cartItem.Product}/>
         })
       }   
       </div>

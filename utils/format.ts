@@ -5,11 +5,3 @@ export const formatCurrency = (amount: number | null) => {
     currency: 'INR',
   }).format(value);
 };
-
-export const deliveryCharge = 100;
-export const tax = 0.01
-
-export const calculateTotals = (subTotal:number):string => {
-  const addedTax = subTotal * tax;
-  return formatCurrency(subTotal + deliveryCharge + addedTax)
-}

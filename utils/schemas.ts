@@ -53,9 +53,9 @@ export const productSchema = z.object({
   }),
   productDesc:z.string().refine((desc)=>{
     const wordCount = desc.split(' ').length;
-    return wordCount >= 10 && wordCount <= 1000;
+    return wordCount >= 10 && wordCount <= 100;
   },{
-    message:'description must be between 10 and 1000 characters'
+    message:'description must be between 10 and 100 characters'
   }),
   company:z.string(),
   category:z.string(),

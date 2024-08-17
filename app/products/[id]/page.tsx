@@ -8,8 +8,7 @@ import ShareButton from "@/components/product/ShareButton";
 import Review from "@/components/review/Review";
 import ReviewDropdown from "@/components/review/ReviewDropdown";
 import { Button } from "@/components/ui/button";
-import { fetchCartId, fetchProductDetails, fetchReviewsOnProduct } from "@/utils/actions"
-import { IconButton } from "@/utils/Button";
+import {  fetchCartId, fetchProductDetails, fetchReviewsOnProduct } from "@/utils/actions"
 import { formatCurrency } from "@/utils/format";
 import { ProductCardProps } from "@/utils/types";
 import { currentUser } from "@clerk/nextjs/server";
@@ -19,14 +18,13 @@ import { LuPenSquare } from "react-icons/lu";
 
 async function ProductDetailsPage({params}:{params:{id:string}}){
   const user = await currentUser();
-
   const product:ProductCardProps | null = await fetchProductDetails(params.id);;  
   const {product:productName,productPrice,id,productDesc,company,productQuantity,image,category} = product!;
   const getReviews = await fetchReviewsOnProduct(id);
-  const cartId = await fetchCartId(id,user?.id!)
+  const cartId = await fetchCartId(user?.id!,id)
   const isAdminUser = user && process.env.ADMIN_USER_ID === user.id;
   const isMyReviewOnComment = getReviews.find((review) => review.profileId === user?.id);
-  
+
   return (
   <main className="mx-4">
     <BreadCrumb name={productName}  category={category} />
@@ -60,11 +58,11 @@ async function ProductDetailsPage({params}:{params:{id:string}}){
           </p>
           
 
-          <Description productDesc={productDesc} />
+          <Description productDesc={productDesc!} />
           <p className=" text-md font-normal px-2 py-1 w-max rounded-md bg-[#3333ff] text-white">{formatCurrency(productPrice)}</p>
           <div className = " flex items-end  gap-8 ">
-          <CartDropdown productQuantity = {productQuantity} price = {productPrice} cartId={cartId} />
-          <CartToggleButton productId = {id} price={productPrice} />
+          <CartDropdown  productQuantity={productQuantity} />
+          <CartToggleButton productId = {id} price={productPrice} cartId={cartId} />
          </div>
         </article>
       </section>

@@ -1,17 +1,23 @@
+
 import {create} from 'zustand'
-type CartState = {
+
+type cartStore={
   selectedQuantity:number,
-  price:number,
-  TotalPrice:number
-  ItemsInCart:number
+  NoOfItemsInCart:number,
+  subTotal:number,
+  tax:number,
+  TotalPrice:number,
+  deliveryCharge:number
+
 }
 
-
-export const useCart = create<CartState>(()=>{
+export const useCart = create<cartStore>(()=>{
   return {
-    selectedQuantity:1,
-    price:0,
-    TotalPrice:0,
-    ItemsInCart:0
+  selectedQuantity:1,
+  NoOfItemsInCart:0,
+  subTotal:0,
+  tax:0,
+  TotalPrice:0,
+  deliveryCharge:0
   }
-})
+});

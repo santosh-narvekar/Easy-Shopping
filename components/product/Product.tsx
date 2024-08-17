@@ -1,5 +1,4 @@
 import Image from "next/image"
-import hero1 from '@/assets/hero1.jpg'
 import Link from "next/link"
 import FavoriteToggleButton from "../product/FavoriteToggleButton"
 import { type ProductCardProps } from "@/utils/types"
@@ -7,7 +6,7 @@ import { formatCurrency } from "@/utils/format"
 import ProductRating from "./ProductRating"
 
 function Product({list,product}:{list:boolean,product:ProductCardProps}){
-  const {id,product:name,productDesc,productPrice,productQuantity,image,company}=product;
+  const {id,product:name,productPrice,image,company}=product;
   return (
     <article  className={`relative w-full h-full border-[2px] group rounded-md px-2 py-2`}>
       
@@ -42,8 +41,5 @@ function Product({list,product}:{list:boolean,product:ProductCardProps}){
     </article>
   )
 }
-/*
 
-      <Image src={mainImage} fill sizes='100vw' alt={name} className="object-cover rounded" priority />
-*/
 export default Product

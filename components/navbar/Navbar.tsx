@@ -1,23 +1,21 @@
-import React, { useEffect } from 'react'
 import Logo from './Logo'
 import SearchInput from './SearchInput'
 import SideNavigation from './SideNavigation'
 import Theme from './Theme'
-import Cart from './Cart'
-import { getItemsInCart } from '@/utils/actions'
 import { currentUser } from '@clerk/nextjs/server'
+import Cart from './Cart'
+import { fetchCartItemCount,  } from '@/utils/actions'
 
 
 async function Navbar(){
   const user = await currentUser();
-  const getItems = await getItemsInCart(user?.id || null);
-  //console.log('get',getItems)
+  const cartItem = await fetchCartItemCount(user?.id!);
   
   return <nav className='navbar z-40 dark:bg-primary-foreground border-b-[1px] max-w-full px-4 md:px-8 py-2 md:py-8  flex items-center flex-wrap md:flex-nowrap justify-between'>
       <Logo />
       <SearchInput />
       <div className='flex items-center gap-4 md:my-0 my-3'>
-        <Cart Items={getItems} />
+        <Cart NoOfItems={cartItem || 0} />
         <Theme />
         <SideNavigation />
       </div>

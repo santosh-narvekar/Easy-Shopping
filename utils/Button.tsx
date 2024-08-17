@@ -4,9 +4,9 @@ import { useFormStatus } from "react-dom";
 import { ReloadIcon } from "@radix-ui/react-icons"
 import { SignInButton } from "@clerk/nextjs";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useCart } from "./store";
 import { LuPenSquare, LuTrash2 } from "react-icons/lu";
 import { useEffect, useOptimistic } from "react";
+import { useCart } from "./store";
 
 type ButtonProps = {
   text:string; 
@@ -60,8 +60,25 @@ export const ProductSignInButton = () =>{
 
 export const ProductCartButton = ({isAddedToCart}:{isAddedToCart:boolean}) => {
   const {pending} = useFormStatus();
-  
-  return <Button type='submit' variant={'outline'} className="p-2 hover:cursor-pointer w-20 bg-[#3333ff] text-primary font-semibold hover:bg-[#1a1aff] transition-all capitalize" disabled={pending} >
+  const {NoOfItemsInCart,selectedQuantity} = useCart(state => state);
+
+  const handleCartItem=()=>{
+    if(NoOfItemsInCart==0){
+      
+      useCart.setState({
+        NoOfItemsInCart:selectedQuantity 
+      })
+
+    }else{
+      
+      useCart.setState({
+        NoOfItemsInCart:NoOfItemsInCart + selectedQuantity
+      })
+
+    }
+  }
+
+  return <Button type='submit' variant={'outline'} className="p-2 hover:cursor-pointer w-20 bg-[#3333ff] text-primary font-semibold hover:bg-[#1a1aff] transition-all capitalize" disabled={pending} onClick={handleCartItem} >
     {
       pending ?<p className=" flex items-center justify-center gap-2 ">
        <ReloadIcon className = " rotate-continuous " /> 
@@ -69,7 +86,7 @@ export const ProductCartButton = ({isAddedToCart}:{isAddedToCart:boolean}) => {
       </p>
        :
        <p className="font-bold text-white">
-       {isAddedToCart ? 'Remove From Cart' :'Add To Cart'}
+       Add To Cart
        </p>
     }
   </Button>

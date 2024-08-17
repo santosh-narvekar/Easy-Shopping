@@ -4,10 +4,13 @@ import Review from "@/components/review/Review";
 import { deleteReviewAction, fetchMyReviews } from "@/utils/actions"
 import { IconButton } from "@/utils/Button";
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-async function ReviewPage(){
+async function ReviewsPage(){
   const user = await currentUser();
-  const reviews = await fetchMyReviews(user?.id!);
+  if(!user) redirect('/');
+  
+  const reviews = await fetchMyReviews(user.id);
 
   
   return (
@@ -42,4 +45,4 @@ const DeleteReview=({reviewId}:{reviewId:string})=>{
   </FormWrapper>
 }
 
-export default ReviewPage
+export default ReviewsPage

@@ -1,5 +1,4 @@
 import EmptyList from "@/components/global/EmptyList"
-import Link from "next/link"
 import { formatCurrency } from "@/utils/format"
 import {
   Table,
@@ -11,14 +10,15 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import FormWrapper from "@/components/form/FormWrapper";
 import { currentUser } from "@clerk/nextjs/server";
 import { fetchMyOrders } from "@/utils/actions";
-import { FaRectangleAd } from "react-icons/fa6";
+import { redirect } from "next/navigation";
 
 async function OrdersPage() {
+
   const user = await currentUser();
-  const orders = await fetchMyOrders(user?.id!);
+  if(!user) redirect('/')
+  const orders = await fetchMyOrders(user.id);
   if(orders.length === 0 ) return <EmptyList />
 
   return (
@@ -35,6 +35,7 @@ async function OrdersPage() {
         <TableHeader>
           <TableRow>
             <TableHead> No of Items </TableHead>
+            <TableHead> Quantity </TableHead>
             <TableHead> Order Total </TableHead>
             <TableHead> Payment Status </TableHead>
             <TableHead> Delivery Status </TableHead>
@@ -45,13 +46,18 @@ async function OrdersPage() {
         <TableBody>
           {
             orders.map((order)=>{
-              const {id,ItemsIncluded,orderTotal,deliveryStatus,paymentStatus} = order
+              const {id,ItemsIncluded,orderTotal,deliveryStatus,paymentStatus,ProductsIncluded} = order
               const formattedCurrency = formatCurrency(orderTotal);
-              const checkDeliveryStatus = !deliveryStatus ? 'items dispatched' : 'delivery completed'
+              const checkDeliveryStatus = !deliveryStatus ? 'pending' : 'delivery completed'
               const checkPaymentStatus = paymentStatus ? 'successful' : 'failed';
               const range = 'within 7 days';
 
               return <TableRow key={id}>
+                <TableCell>  
+                  {ProductsIncluded}
+                </TableCell>
+
+                
                 <TableCell>  
                   {ItemsIncluded}
                 </TableCell>

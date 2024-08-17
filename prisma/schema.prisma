@@ -23,9 +23,9 @@ model Profile{
   address String 
   image   String
   favorites    Favorite[]
-  Cart         Cart[]
   Reviews      Review[]
   Orders       Order[]
+  Cart         Cart[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   clerkId      String     @unique
@@ -41,8 +41,8 @@ model Product{
   productQuantity Int
   image        String
   favorites    Favorite[]
-  Cart         Cart[]
   Reviews      Review[]
+  CartItem     CartItem[]
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
@@ -57,18 +57,6 @@ model Favorite{
   profile       Profile @relation(fields:[profileId],references:[clerkId],onDelete: Cascade)
 }
 
-model Cart{
-  id         String   @id   @default(uuid())
-  productId  String 
-  profileId  String
-  selectedQuantity Int
-  price      Int
-  product    Product @relation(fields:[productId],references:[id],onDelete:Cascade)
-  profile    Profile @relation(fields:[profileId],references:[clerkId],onDelete:Cascade)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-}
-
 model Review{
   id         String    @id   @default(uuid())
   productId  String
@@ -81,14 +69,40 @@ model Review{
   updatedAt  DateTime   @updatedAt
 }
 
+model Cart{
+  id         String  @id  @default(uuid())
+  profileId  String  @unique
+  profile    Profile @relation(fields:[profileId],references:[clerkId],onDelete:Cascade)
+  CartItem   CartItem[]
+  TotalPrice  Int    @default(0)
+  Tax         Int    @default(0)
+  deliveryCharge  Int  @default(100)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model CartItem{
+  id         String   @id   @default(uuid())
+  profileId  String  
+  productId  String
+  price      Int
+  noOfItemsSelected  Int
+  Cart       Cart @relation(fields:[profileId],references:[profileId],onDelete:Cascade)
+  Product    Product @relation(fields:[productId],references:[id],onDelete:Cascade)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt 
+}
+
 model Order{
   id          String  @id @default(uuid())
   profileId   String
   profile     Profile @relation(fields:[profileId],references:[clerkId],onDelete:Cascade)
   orderTotal  Int
   ItemsIncluded Int
+  ProductsIncluded Int
   paymentStatus Boolean @default(false)
   deliveryStatus Boolean @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+

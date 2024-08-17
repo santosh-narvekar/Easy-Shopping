@@ -26,7 +26,7 @@ async function CreateProfilePage(){
 
             <Description name="address" labelText="address (10-1000 Words)"  />
 
-          <SubmitButton text="Create Profile" className='mt-8 text-primary'/>
+          <SubmitButton text="Create Profile" className='mt-8 '/>
 
         </FormWrapper>
       </div>

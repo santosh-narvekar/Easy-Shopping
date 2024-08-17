@@ -6,8 +6,6 @@ import { createReviewSchema, imageSchema, productSchema, profileSchema, validate
 import { uploadImage } from "./supabase";
 import db from './db'
 import { revalidatePath } from "next/cache";
-import { calculateTotals, deliveryCharge, tax } from "./format";
-import { ProductCardProps } from "./types";
 
 const getAuthUser = async() => {
   const user = await currentUser();
@@ -30,17 +28,10 @@ const renderError = (error:unknown)=>{
 export const createProfileAction = async(prevState:any,formData:FormData) => {  
   try{
     const user = await currentUser();
-    console.log(user);
     if(!user) throw new Error('Please login to create a profile');
-    console.log(prevState);
-    console.log('formData',formData)
-    const rawData = Object.fromEntries(formData);
-  
-    console.log('rawData',rawData);
-    
+    const rawData = Object.fromEntries(formData);    
     const validatedFields = validateWithZod(profileSchema,rawData);
 
-    console.log('result',validatedFields);
     await db.profile.create({
       data:{
         clerkId:user.id,
@@ -48,6 +39,12 @@ export const createProfileAction = async(prevState:any,formData:FormData) => {
         image:user.imageUrl ?? '',
         ...validatedFields
       }
+    })
+
+    await db.cart.create({
+      data:{
+         profileId:user.id,
+      }      
     })
 
     clerkClient.users.updateUserMetadata(user.id,{
@@ -63,30 +60,30 @@ export const createProfileAction = async(prevState:any,formData:FormData) => {
   redirect('/');
 }
 
+export const fetchProfileImage = async(profileId:string) => {
 
-export const fetchProfileImage = async() => {
-  const user = await currentUser();
-  if(!user) return null;
+  if(profileId){
+    const profile = await db.profile.findUnique({
+      where:{
+        clerkId:profileId
+      },
+      select:{
+        image:true
+      }
+    });
+    return profile?.image;
+  }
 
-  const profile = await db.profile.findUnique({
-    where:{
-      clerkId:user.id
-    },
-    select:{
-      image:true
-    }
-  });
+
   
-  return profile?.image;
 }
 
 
-export const fetchProfile = async() => {
-  const user = await getAuthUser();
-
+export const fetchProfile = async(profileId:string) => {
+  
   const profile = await db.profile.findUnique({
     where:{
-      clerkId:user.id
+      clerkId:profileId
     }
   })
 
@@ -127,10 +124,6 @@ export const createProductAction = async(prevState:any,formData:FormData) => {
   try{
     const rawData = Object.fromEntries(formData);
     const image = formData.get('image') as File;
-
-    console.log(rawData)
-
-
     const validatedFields = validateWithZod(productSchema,rawData);
     const validateFile = validateWithZod(imageSchema,{image});
     const fullPath = await uploadImage(validateFile.image);
@@ -187,11 +180,10 @@ export const updateProductAction = async(prevState:any,formData:FormData):Promis
       }
       
       revalidatePath('/admin');
-      //return {message:'Update Successful for the product'}
     }catch(error){
       return renderError(error);
     }    
-    redirect(`/products/${productId}`)
+  redirect(`/products/${productId}`)
 }
 
 export const fetchProducts = async({search='',category}:{
@@ -205,7 +197,6 @@ export const fetchProducts = async({search='',category}:{
         {product:{contains:search,mode:'insensitive'}},
         {company:{contains:search,mode:'insensitive'}},
         {productDesc:{contains:search,mode:'insensitive'}},
-        {productPrice:{equals:Number(search)}}
       ]
     },
     select:{
@@ -221,7 +212,6 @@ export const fetchProducts = async({search='',category}:{
     orderBy:{
       createdAt:'desc'
     }
-  
   })
 
   return products
@@ -260,15 +250,15 @@ export const fetchProductRating = async(id:string)=>{
     }  
   })
   
-  console.log(result)
 
   return {rating:result[0]?._avg.rating?.toFixed() ?? 0 , count:result[0]?._count.rating.toFixed() ?? 0}
   
 }
 
 export const fetchFavoriteId = async(productId:string) => {
-  // we will fetch the favorite id where the productId will be passed through when we will get the productId and we will look for favorite where this condition matches and if it is not there we will return null otherwise we return id
-  const user = await getAuthUser();
+  const user = await currentUser();
+  if(!user) return null
+
   const favorite = await db.favorite.findFirst({
     where:{
       productId,
@@ -287,7 +277,6 @@ export const toggleFavorite = async(prevState:{
   pathname:string
 }) => {
   const user = await getAuthUser();
-  console.log(user.id)
   const {productId,favoriteId,pathname} = prevState;
 
   try{
@@ -301,8 +290,8 @@ export const toggleFavorite = async(prevState:{
       await db.favorite.create({
         data:{
           productId,
-          profileId:user.id
-        }
+          profileId:user.id,
+        },
       })
     }
 
@@ -313,75 +302,7 @@ export const toggleFavorite = async(prevState:{
   }
 }
 
-
-export const fetchCartId = async(productId:string,profileId:string)=>{
-  //const user = await getAuthUser();
-  const cartId = await db.cart.findFirst({
-    where:{
-      productId,
-      profileId:profileId
-    },
-    select:{
-      id:true
-    }
-  })
-
-  return cartId?.id || null
-}
-
-export const toggleCart = async(prevState:{productId:string,cartId:string | null,pathname:string,price:number,selectedQuantity:number})=>{
-  const user = await getAuthUser();
-  const {productId,cartId,pathname,price,selectedQuantity} = prevState;
-  try{
-    if(cartId){
-      await db.cart.delete({
-        where:{
-          id:cartId,
-          productId:productId
-        }
-      })
-    }else{
-      if(selectedQuantity <= 0){
-        return {message:'Please select a quantity before proceeding'}
-      }else{
-        await db.cart.create({
-          data:{
-            profileId:user.id,
-            productId:productId,
-            selectedQuantity,
-            price
-          }
-        })
-      }
-    }
- 
-    revalidatePath(pathname);
-    return {message:cartId?'Product Removed from Cart':' Product Added to Cart '}
-  }catch(error){
-    return renderError(error);
-  }
-}
-
-export const getItemsInCart = async(id:string | null):Promise<string | number> => {
-  
-  if(!id) return 0
-  
-  let sum = await db.cart.groupBy({
-    by:['profileId'],
-    _sum:{
-      selectedQuantity:true
-    },
-    where:{
-      profileId:id
-    }
-  })
- console.log('sum',sum)
-  return sum[0]?._sum.selectedQuantity?.toFixed() ?? 0
-}
-
-export const getFavorites = async(profileId:string) => {
-  await getAuthUser();
-  
+export const fetchFavorites = async(profileId:string) => {
   const favProducts = await db.favorite.findMany({
     where:{
       profileId
@@ -400,7 +321,6 @@ export const getFavorites = async(profileId:string) => {
 export const createReviewAction = async(prevState:any,formData:FormData):Promise<{message:string}> => {
   const user =  await getAuthUser();
   try{
-    //const =
     const rawData = Object.fromEntries(formData);
     const validatedFields = validateWithZod(createReviewSchema,rawData);
     
@@ -464,8 +384,6 @@ export const fetchReviewsOnProduct = async(productId:string) => {
 }
 
 export const fetchMyReviews = async(profileId:string)=>{
-   await getAuthUser();
-
   return await db.review.findMany({
     where:{
       profileId
@@ -474,50 +392,151 @@ export const fetchMyReviews = async(profileId:string)=>{
       profile:true
     }
   })
-
 }
 
-export const fetchCart = async()=>{
-  const user = await getAuthUser();
+export const fetchCartId = async(profileId:string,productId:string):Promise<string | null> => {
+ const cartItem = await db.cartItem.findFirst({
+      where:{
+        profileId,
+        productId
+      },
+      select:{
+        id:true
+      }
+    })
 
-  const cart =  await db.cart.findMany({
+    return cartItem?.id || null
+}
+
+export const toggleCartAction = async(prevState:{cartId:string | null,productId:string,ItemsSelected:number,price:number,pathname:string}):Promise<{message:string}>=>{ 
+
+  const user = await getAuthUser(); 
+  const {cartId,productId,ItemsSelected,price,pathname} = prevState
+  const TotalPriceCalculated = price * ItemsSelected;
+  
+  try{
+    if(cartId){
+    await db.cartItem.delete({
+        where:{
+          id:cartId,
+          profileId:user.id,
+          productId
+        }
+    })
+    
+    }else{
+
+     await db.cartItem.create({
+        data:{
+          profileId:user.id,
+          productId,
+          price:TotalPriceCalculated,
+          noOfItemsSelected:ItemsSelected
+        }
+     })
+}
+
+    revalidatePath(pathname);
+    return {message:`Item ${cartId?'removed':'added'} to cart successfully!`}
+  }catch(err){
+    return renderError(err);
+  }
+}
+
+
+export const fetchCartItemCount=async(profileId:string)=>{
+  
+  const cartSum = await db.cartItem.groupBy({
+      by:['profileId'],
+      _sum:{
+        noOfItemsSelected:true
+      },
+      where:{
+        profileId
+      }
+    })
+    return cartSum[0]?._sum.noOfItemsSelected || 0
+}
+
+export const fetchCartItems = async(profileId:string) => {
+
+  const cartItem = await db.cartItem.findMany({
+      where:{
+        profileId
+      },
+      include:{
+        Product:{
+          select:{
+            id:true,
+            product:true,
+            productQuantity:true,
+            image:true,
+            productPrice:true,
+            company:true,
+            category:true
+          }
+        }
+      },
+      orderBy:{
+        createdAt:'desc'
+      }
+  })
+
+  return cartItem;
+}
+
+export const updateCartAction = async(cartId:string,quantity:number,productPrice:number):Promise<{message:string}> => {
+  const user = await getAuthUser();
+  const price = productPrice * quantity;
+  try{
+
+    await db.cartItem.update({
+      where:{
+        id:cartId,
+        profileId:user.id
+      },
+      data:{
+        noOfItemsSelected:quantity,
+        price
+      }
+    })
+
+    revalidatePath('/cart');
+    return {message:'Item updated successfully!'}
+  }catch(err){
+    return renderError(err);
+  }
+}
+
+
+export const createOrderAction = async() =>{
+  const user = await getAuthUser();
+  let orderId:null | string = null
+  await calculateTotals()  
+  const orderTotal = await db.cart.findFirst({
     where:{
       profileId:user.id
     },
     select:{
-      product:true,
-      selectedQuantity:true,
-      price:true,
-      id:true
+      TotalPrice:true,
+      Tax:true,
+      deliveryCharge:true
+    }
+  });
+
+  const getItems = await db.cartItem.groupBy({
+    by:['profileId'],
+    _sum:{
+      noOfItemsSelected:true
     },
-    orderBy:{
-      createdAt:'desc'
+    _count:{
+      noOfItemsSelected:true
+    },
+    where:{
+      profileId:user.id
     },
   })
-  return cart
-}
 
-export const getProductTotals = async(profileId:string):Promise<string | number> => {
-  const price = await db.cart.groupBy({
-   by:['profileId'],
-   _sum:{
-    price:true
-   },
-   where:{
-    profileId
-   }
-  })
-
-  return price[0]?._sum.price?.toFixed() ?? 0
-}
-
-export const createOrderAction = async(prevState:{subTotal:number}) =>{
-  const {subTotal} = prevState;
-  const user = await getAuthUser();
-  const ItemsInCart  = await getItemsInCart(user.id);
-  const addedTax = subTotal * tax; 
-  const TotalWithTaxAndDelivery = subTotal + deliveryCharge + addedTax 
-  let orderId:null | string = null
   await db.order.deleteMany({
     where:{
       profileId:user.id,
@@ -529,18 +548,57 @@ export const createOrderAction = async(prevState:{subTotal:number}) =>{
     const order = await db.order.create({
       data:{
         profileId:user.id,
-        orderTotal:TotalWithTaxAndDelivery,
-        ItemsIncluded:Number(ItemsInCart)
+        orderTotal:(orderTotal?.TotalPrice || 0) + (orderTotal?.Tax || 0) + (orderTotal?.deliveryCharge || 0),
+        ItemsIncluded:getItems[0]?._sum.noOfItemsSelected || 0,
+        ProductsIncluded:getItems[0]?._count.noOfItemsSelected || 0
       }
     })
     orderId = order.id;
   }catch(error){
     return renderError(error)
   }
+
   redirect(`/checkout?orderId=${orderId}`)
 } 
 
+export const calculateTotals = async() => {
+  const user = await currentUser();
+  if(!user) return null;
+
+  const result = await db.cartItem.groupBy({
+      by:['profileId'],
+      _sum:{
+        price:true
+      },
+      where:{
+        profileId:user.id
+      }
+  });
+    
+    
+  const cart = await db.cart.update({
+      where:{
+        profileId:user.id
+      },
+      data:{
+        TotalPrice:result[0]?._sum.price || 0,
+        Tax:(result[0]?._sum.price || 0) * 0.01
+      },
+      select:{
+        TotalPrice:true,
+        Tax:true,
+        deliveryCharge:true
+      }
+  })
+
+  const orderTotal =  (cart?.Tax || 0) + (cart?.TotalPrice || 0) + (cart?.deliveryCharge || 0);
+
+  return {totalPrice:cart.TotalPrice,tax:cart.Tax,orderTotal,deliveryCharge:cart?.deliveryCharge || 0}
+
+}
+
 export const fetchMyOrders = async(profileId:string) => {
+  
   return await db.order.findMany({
     where:{
       profileId
@@ -549,6 +607,7 @@ export const fetchMyOrders = async(profileId:string) => {
       profile:true,
     }
   })
+
 }
 
 export const fetchAllOrders = async() =>{
@@ -567,25 +626,6 @@ export const fetchAllOrders = async() =>{
       }
     }
   })
-}
-
-export const updateOrder = async(prevState:{id:string,deliveryStatus:boolean}):Promise<{message:string}> =>{
-  await getAdminUser();
-  const {id,deliveryStatus} = prevState
-  try{
-    await db.order.update({
-      where:{
-        id
-      },
-      data:{
-        deliveryStatus:!deliveryStatus
-      }
-    })
-    revalidatePath(`/admin?selected=manageOrders`)
-    return {message:`order with order id ${id} successfully updated`}
-  }catch(error){
-    return renderError(error);
-  }
 }
 
 export const deleteOrder = async(prevState:{id:string}):Promise<{message:string}> => {

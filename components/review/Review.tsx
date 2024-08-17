@@ -4,24 +4,11 @@ import { Card } from "../ui/card"
 import { FaStar , FaRegStar } from "react-icons/fa"
 import { useState } from "react";
 import { Button } from "../ui/button";
-
-type ReviewCardProps={
-  id:string,
-  productId:string,
-  profileId:string
-  profile:{
-    image:string,
-    username:string,
-    firstName:string,
-    lastName:string
-  }
-  rating:number,
-  review:string,
-}
+import { type ReviewCardProps } from "@/utils/types";
 
 function Review({review,children}:{review:ReviewCardProps,children?:React.ReactNode}){
-  const {id,rating,review:comment} = review;
-  const {image,username,firstName,lastName} = review.profile;
+  const {rating,review:comment} = review;
+  const {image,firstName,lastName} = review.profile;
   const [longTextDisplayed,setIsLongTextDisplayed] = useState(false);
  
   const stars = Array.from({length:5},(_,i)=>{
@@ -32,6 +19,7 @@ function Review({review,children}:{review:ReviewCardProps,children?:React.ReactN
   const handleLongTextDisplayed=()=>{
     setIsLongTextDisplayed(!longTextDisplayed)
   }
+  
   const words = comment.split(' ').length > 100;
   const splicedComment = comment.split(' ').slice(0,100).join(' ')
   

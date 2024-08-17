@@ -15,20 +15,33 @@ export type ProductCardProps = {
   id:string,
   product:string,
   productPrice:number,
-  productDesc:string,
+  productDesc?:string,
   company:string,
   category:string,
   productQuantity:number,
   image:string,
 }
 
-/*
- id:true,
-      product:true,
-      productPrice:true,
-      productDesc:true,
-      productQuantity:true,
-      company:true,
-      image:true,
-      category:true,
-*/
+
+export type CartItemProps = {
+  Product:ProductCardProps,
+  profileId:string,
+  productId:string,
+  noOfItemsSelected:number,
+  id:string
+  price:number,
+}
+
+export type ReviewCardProps = {
+  id:string,
+  productId:string,
+  profileId:string
+  profile:{
+    image:string,
+    username:string,
+    firstName:string,
+    lastName:string
+  }
+  rating:number,
+  review:string,
+}

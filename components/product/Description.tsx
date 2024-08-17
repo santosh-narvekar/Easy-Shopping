@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 function Description({productDesc}:{productDesc:string}){
   const [isLongTextDisplayed,setIsLongTextDisplayed] = useState(false);
   
-  const words = productDesc.split(' '); // 100 words
+  const words = productDesc.split(' '); 
 
   const setText = () =>{
     setIsLongTextDisplayed(!isLongTextDisplayed)

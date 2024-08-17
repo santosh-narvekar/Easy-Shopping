@@ -5,13 +5,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fetchProfile, updateProfileAction } from "@/utils/actions"
 import { SubmitButton } from "@/utils/Button";
+import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { LuUser2 } from "react-icons/lu";
 
 async function AboutPage(){
-  const profile = await fetchProfile();
+  const user = await currentUser();
+  if(!user)  redirect('/');
+  const profile = await fetchProfile(user.id);
   const name = 'image'
-  console.log(profile);
  
   const userIcon = <LuUser2 className="w-24 h-24 bg-primary rounded text-white mb-4"/>
 

@@ -1,14 +1,12 @@
-import { fetchCartId } from "@/utils/actions";
 import { ProductSignInButton } from "@/utils/Button";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import CartToggleForm from "./CartToggleForm";
 
-async function CartToggleButton({productId,price}:{productId:string,price:number}){
+async function CartToggleButton({productId,price,cartId,isProductPage=true}:{productId:string,price:number,cartId:string | null,isProductPage?:boolean}){
   const {userId} = auth();
   if(!userId) return <ProductSignInButton />
-  const cartId = await fetchCartId(productId,userId);
   
-  return <CartToggleForm productId = {productId} cartId = {cartId} price={price} />
+  return <CartToggleForm productId = {productId} cartId = {cartId} price={price} isProductPage={isProductPage} />
 
 }
 

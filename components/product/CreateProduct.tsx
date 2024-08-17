@@ -1,6 +1,6 @@
 import React from 'react'
 import FormWrapper from '../form/FormWrapper'
-import { createProductAction, fetchProductDetails, updateProductAction } from '@/utils/actions'
+import { createProductAction, updateProductAction } from '@/utils/actions'
 import { ProductCardProps } from '@/utils/types'
 import FormInput from '../form/FormInput'
 import PriceInput from '../form/PriceInput'
@@ -25,7 +25,7 @@ function CreateProduct({searchParams,formData}:{searchParams:{id?:string,selecte
           <FormInput type="input" label="Product Name" defaultValue={checkForSearchParams && formData?.product}  placeholder="enter product name..." name="product"  />
           <PriceInput defaultValue={checkForSearchTypeNumberParams && formData?.productPrice}  />
           </div>
-          <Description labelText="Product Description(10-1000 words)" name="productDesc" defaultValue={checkForSearchParams && formData?.productDesc}  />
+          <Description labelText="Product Description(10-100 words)" name="productDesc" defaultValue={checkForSearchParams && formData?.productDesc}  />
           <div className="grid md:grid-cols-2 gap-2 mb-4">
             <FormInput type="input" label="CompanyName(30 limit)" placeholder="enter company name..." name="company"  defaultValue={checkForSearchParams && formData?.company} />
             <CategoriesInput defaultValue={checkForSearchParams && formData?.category} />

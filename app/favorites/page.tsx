@@ -1,12 +1,13 @@
 import EmptyList from "@/components/global/EmptyList";
 import Product from "@/components/product/Product";
-import { getFavorites } from "@/utils/actions"
-import { type ProductCardProps } from "@/utils/types";
+import { fetchFavorites } from "@/utils/actions"
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-async function page(){
+async function FavoritesPage(){
   const user = await currentUser();
-  const favorites = await getFavorites(user?.id!); 
+  if(!user) redirect('/');
+  const favorites = await fetchFavorites(user.id); 
   
   return (
     <>
@@ -26,4 +27,4 @@ async function page(){
   )
 }
 
-export default page
+export default FavoritesPage

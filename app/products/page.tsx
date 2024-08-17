@@ -1,6 +1,5 @@
 import Categories from "@/components/categories/Categories"
-import { LuLayoutGrid, LuList } from 'react-icons/lu';
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import ProductContainer from "@/components/product/ProductContainer";
 import LoadingCards from "@/components/card/LoadingCards";
 

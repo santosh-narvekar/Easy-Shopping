@@ -13,12 +13,12 @@ export const POST = async(req:NextRequest,res:NextResponse) => {
   const { orderId } = await req.json();
   const origin = requestHeaders.get('origin');
 
-  const products = await db.cart.findMany({
+  const products = await db.cartItem.findMany({
     where:{
       profileId:user?.id
     },
     include:{
-      product:true
+      Product:true
     }
   })
   
@@ -40,7 +40,7 @@ export const POST = async(req:NextRequest,res:NextResponse) => {
   }
   
   const {orderTotal,ItemsIncluded} = order; 
-  
+ 
   try{
     const session = await stripe.checkout.sessions.create({
     ui_mode:'embedded',
@@ -53,10 +53,11 @@ export const POST = async(req:NextRequest,res:NextResponse) => {
         price_data:{
           currency:'inr',
           product_data:{
-            name:`${products.map(prod => prod.product.product.toString())}`,
+            name:`${products.map(prod => prod.Product.product.toString())}`,
+            images:products.map(p=>p.Product.image),
+            
           },
         unit_amount:Number((orderTotal * 100/ItemsIncluded).toFixed())+ 1 
-        //unit_amount:orderTotal * 100
         }
       },
     ],

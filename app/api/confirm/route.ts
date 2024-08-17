@@ -22,7 +22,7 @@ export const GET = async(req:NextRequest)=>{
       data:{ paymentStatus:true }
     })
     
-    await db.cart.deleteMany({
+    await db.cartItem.deleteMany({
       where:{
         profileId:user?.id,
       }
