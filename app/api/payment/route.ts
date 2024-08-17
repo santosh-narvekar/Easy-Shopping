@@ -3,9 +3,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 import { type NextRequest,type NextResponse } from 'next/server';
 import db from '@/utils/db';
 import { currentUser } from '@clerk/nextjs/server';
-import { useCart } from '@/utils/store';
-import { calculateTotals, deliveryCharge, tax } from '@/utils/format';
-import { fetchProfile } from '@/utils/actions';
 
 export const POST = async(req:NextRequest,res:NextResponse) => {
   const requestHeaders = new Headers(req.headers);
