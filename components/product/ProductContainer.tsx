@@ -1,5 +1,3 @@
-
-import React, { useEffect } from 'react'
 import ProductGrid from './ProductGrid'
 import ProductList from './ProductList'
 import { type ProductCardProps } from '@/utils/types'

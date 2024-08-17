@@ -1,5 +1,4 @@
 'use client'
-import { ProductCardProps } from "@/utils/types";
 import CartItem from "./CartItem";
 import CartCheckoutWrapper from "./CartCheckoutWrapper";
 import { useEffect } from "react";

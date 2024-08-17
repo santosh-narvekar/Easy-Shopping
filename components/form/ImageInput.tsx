@@ -11,6 +11,7 @@ function ImageInput({defaultValue}:{defaultValue?:string}) {
   const handleUpdate=()=>{
     setHandleImageUpdate(!handleImageUpdate)
   }
+  
   return (
     <div className="mb-2">
       <Label htmlFor={name} className="capitalize ">Image {defaultValue && '(already selected)'} </Label>

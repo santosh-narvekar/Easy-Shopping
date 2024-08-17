@@ -629,6 +629,27 @@ export const fetchAllOrders = async() =>{
   })
 }
 
+export const updateOrder = async(prevState:{id:string,deliveryStatus:boolean}):Promise<{message:string}>=>{
+  await getAdminUser();
+  const {id,deliveryStatus} = prevState;
+  try{
+    await db.order.update({
+      where:{
+         id
+      },
+      data:{
+        deliveryStatus:!deliveryStatus
+      }
+    })
+
+    return {message:`order updated successfully!`}
+
+  }catch(err){
+    return renderError(err);
+  }
+}
+
+
 export const deleteOrder = async(prevState:{id:string}):Promise<{message:string}> => {
  await getAdminUser();
  const {id} = prevState;

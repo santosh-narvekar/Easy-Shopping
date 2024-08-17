@@ -19,8 +19,7 @@ import {
 
 function ShareButton({productId,name}:{productId:string,name:string}) {
 
- // const url = process.env.NEXT_PUBLIC_WEBSITE_URL;
-  const url = 'localhost:3000'  
+  const url = process.env.NEXT_PUBLIC_WEBSITE_URL; 
   const shareLink = `${url}/product/${productId}`
 
   return (
