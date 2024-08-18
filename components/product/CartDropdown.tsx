@@ -52,7 +52,7 @@ function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,
       useCart.setState({subTotal:subTotal + (price! * difference)});
       useCart.setState({tax:Math.floor((subTotal + (price! * difference))  * 0.01)}) 
       useCart.setState({
-         TotalPrice:(subTotal +  (price! * difference)) + ((subTotal + (price! * difference)) * 0.01)  + deliveryCharge
+         TotalPrice:Math.floor((subTotal +  (price! * difference)) + ((subTotal + (price! * difference)) * 0.01)  + deliveryCharge)
       })
       setPrevValue(value)
     }else if(value < prevValue){
@@ -60,7 +60,7 @@ function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,
       useCart.setState({subTotal:subTotal - (price! * difference)});
       useCart.setState({tax:Math.floor((subTotal - (price! * difference)) * 0.01)})  
       useCart.setState({  
-        TotalPrice:(subTotal -  (price! * difference)) + ((subTotal - (price! * difference)) * 0.01)  + deliveryCharge
+        TotalPrice:Math.floor((subTotal -  (price! * difference)) + ((subTotal - (price! * difference)) * 0.01)  + deliveryCharge)
       })
       setPrevValue(value)
     }
