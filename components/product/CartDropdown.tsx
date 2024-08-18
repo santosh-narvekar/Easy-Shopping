@@ -50,17 +50,17 @@ function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,
     if(value >= prevValue){ 
       const difference = value - prevValue 
       useCart.setState({subTotal:subTotal + (price! * difference)});
-      useCart.setState({tax:Math.floor(Number(((subTotal + (price! * difference))  * 0.01).toFixed()))}) 
+      useCart.setState({tax:Math.floor((subTotal + (price! * difference))  * 0.01)}) 
       useCart.setState({
-         TotalPrice:Number(((subTotal +  (price! * difference)) + ((subTotal + price! * difference) * 0.01)  + deliveryCharge).toFixed())
+         TotalPrice:(subTotal +  (price! * difference)) + ((subTotal + (price! * difference)) * 0.01)  + deliveryCharge
       })
       setPrevValue(value)
     }else if(value < prevValue){
       const difference = prevValue - value
       useCart.setState({subTotal:subTotal - (price! * difference)});
-      useCart.setState({tax:Math.floor(Number((subTotal - (price! * difference)) * 0.01))})  
+      useCart.setState({tax:Math.floor((subTotal - (price! * difference)) * 0.01)})  
       useCart.setState({  
-        TotalPrice:Number(((subTotal -  (price! * difference)) + ((subTotal - price! * difference) * 0.01)  + deliveryCharge).toFixed())
+        TotalPrice:(subTotal -  (price! * difference)) + ((subTotal - (price! * difference)) * 0.01)  + deliveryCharge
       })
       setPrevValue(value)
     }
