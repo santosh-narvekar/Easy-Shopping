@@ -10,24 +10,27 @@ import {
 import { updateCartAction } from '@/utils/actions';
 import { useEffect, useState } from 'react';
 
-function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,price}:{defaultValue?:number,productQuantity:number,isProductPage?:boolean,cartId?:string,price?:number}){
-  
+function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,price,setOptimized}:{
+  defaultValue?:number,productQuantity:number,isProductPage?:boolean,cartId?:string,price?:number,
+  setOptimized?:(action:{price:number,noOfItemsSelected:number,cartId:string})=>void
+}){
+  const [prevValue,setPrevValue] = useState(0);
   
   useEffect(()=>{
     useCart.setState({
       selectedQuantity:1
     })
+    setPrevValue(defaultValue)
   },[])
 
   const {selectedQuantity} = useCart( state => state );
   const [loading,setLoading] = useState(false)
-
+  const {TotalPrice,tax,deliveryCharge,subTotal} = useCart(state=>state);
   const ItemsInStock = Array.from({length:productQuantity},(_,i)=>{
     return i + 1 
   })
 
   const handleSelectedQuantity = (value:number)=>{
-    
     useCart.setState({
       selectedQuantity:value,  
     })
@@ -35,20 +38,48 @@ function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,
   }
 
   const updateQuantity = async(value:number) => {
-    setLoading(true);
-    try{
-      if(cartId && price) await updateCartAction(cartId,value,price);
-    }catch(err){
-      console.log(err)
-    }finally{
-      setLoading(false)
-    }     
+
+    if(value === prevValue){
+      useCart.setState({
+        subTotal:subTotal,
+      })
+    }
+
+    if(prevValue == 0) setPrevValue(value); 
+    
+    if(value >= prevValue){ 
+      const difference = value - prevValue 
+      useCart.setState({subTotal:subTotal + (price! * difference)});
+      useCart.setState({tax:Number(((subTotal + (price! * difference))  * 0.01).toFixed())}) 
+      useCart.setState({
+         TotalPrice:Number(((subTotal +  (price! * difference)) + ((subTotal + price! * difference) * 0.01)  + deliveryCharge).toFixed())
+      })
+      setPrevValue(value)
+    }else if(value < prevValue){
+      const difference = prevValue - value
+      useCart.setState({subTotal:subTotal - (price! * difference)});
+      useCart.setState({tax:Number((subTotal - (price! * difference)) * 0.01)})  
+      useCart.setState({  
+        TotalPrice:Number(((subTotal -  (price! * difference)) + ((subTotal - price! * difference) * 0.01)  + deliveryCharge).toFixed())
+      })
+      setPrevValue(value)
+    }
+
+
+
+    if(setOptimized){
+      setOptimized({
+        noOfItemsSelected:value,
+        price:price! *  value,
+        cartId:cartId!
+      })
+    }
+
+    if(cartId && price) await updateCartAction(cartId,value,price);    
   }
 
   return <div className = ' flex flex-col gap-[1px] ' >
-  {isProductPage && <h4> Quantity : </h4>}
- <Select  disabled={loading} onValueChange={(value) => isProductPage? handleSelectedQuantity(Number(value)) :updateQuantity(Number(value))
-}>
+  {isProductPage && <h4> Quantity : </h4>}<Select  disabled={loading} onValueChange={(value) => isProductPage? handleSelectedQuantity(Number(value)) :updateQuantity(Number(value))}>
     <SelectTrigger className='w-[90px]' defaultValue={defaultValue.toString() || selectedQuantity.toString()}  >
           <SelectValue placeholder={defaultValue || 1} />
     </SelectTrigger>
@@ -61,11 +92,11 @@ function CartDropdown({defaultValue=0,productQuantity,isProductPage=true,cartId,
           </SelectItem>
         })
       }
-    </SelectContent>
+    </SelectContent>    
 
-    
-  </Select>
-  </div>
+ </Select>
+</div>
+
 }
 
 export default CartDropdown

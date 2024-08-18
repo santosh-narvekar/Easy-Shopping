@@ -1,7 +1,7 @@
 'use client'
 import CartItem from "./CartItem";
 import CartCheckoutWrapper from "./CartCheckoutWrapper";
-import { useEffect } from "react";
+import { useEffect, useOptimistic } from "react";
 import { calculateTotals } from "@/utils/actions";
 import { useCart } from "@/utils/store";
 import { type CartItemProps } from "@/utils/types";
@@ -21,7 +21,7 @@ function CartContainer({cartItems}:{cartItems:CartItemProps[]}){
         const {totalPrice,orderTotal,tax,deliveryCharge} = cartData;
         useCart.setState({
           subTotal:totalPrice,
-          tax:tax ,
+          tax:tax,
           TotalPrice:orderTotal,
           deliveryCharge:deliveryCharge 
         });
@@ -30,11 +30,12 @@ function CartContainer({cartItems}:{cartItems:CartItemProps[]}){
      calculate()
   },[cartItems,cartItems.length])
 
+
   return (
     <section className="grid lg:grid-cols-[7fr,3fr] gap-4 w-full  my-4 ">
       <div className="flex flex-col">
       {
-        cartItems.map((cartItem)=>{
+        cartItems.map((cartItem:CartItemProps)=>{
           const {id:cartId,profileId,productId,price,noOfItemsSelected} = cartItem;
           return <CartItem key={cartId} cartId={cartId} productId={productId} profileId={profileId} price={price} noOfItemsSelected={noOfItemsSelected} Product={cartItem.Product}/>
         })

@@ -439,7 +439,7 @@ export const toggleCartAction = async(prevState:{cartId:string | null,productId:
           noOfItemsSelected:ItemsSelected
         }
      })
-}
+    }
 
     revalidatePath(pathname);
     return {message:`Item ${cartId?'removed':'added'} to cart successfully!`}
