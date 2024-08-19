@@ -450,7 +450,7 @@ export const toggleCartAction = async(prevState:{cartId:string | null,productId:
 
 
 export const fetchCartItemCount=async(profileId:string)=>{
-  
+  if(!profileId) return 0
   const cartSum = await db.cartItem.groupBy({
       by:['profileId'],
       _sum:{
