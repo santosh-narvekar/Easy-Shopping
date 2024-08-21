@@ -24,3 +24,12 @@
  - Checkout Page
  - Payment simulation using Stripe
  - Admin Page(Create,Update and Manage Orders)
+
+
+ - To test it in local enviornment
+ - clone the repository under a folder
+ - run cd folder name in terminal
+ - run npm install and npm run dev
+ - project would be live at localhost:3000
+
+   
