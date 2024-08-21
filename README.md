@@ -26,7 +26,7 @@
  - Admin Page(Create,Update and Manage Orders)
 
 
- - To test it in local enviornment
+**To test it in local enviornment**
  - clone the repository under a folder
  - run cd folder name in terminal
  - run npm install and npm run dev
