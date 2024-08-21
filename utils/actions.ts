@@ -234,21 +234,9 @@ export const fetchProducts = async({search='',category,page = '1'}:{
 
   console.log(products);
 
-  const totalCount:number = await db.product.count({
-    where:{
-      category,
-        OR:[
-        {product:{contains:search,mode:'insensitive'}},
-        {company:{contains:search,mode:'insensitive'}},
-        {productDesc:{contains:search,mode:'insensitive'}},
-      ]
-    },
-
-  });
-
   const totalPages = Math.ceil(count/limit) 
   let pageNo = Number(page)
-  return {products,count,totalPages,totalCount,page:pageNo} 
+  return {products,count,totalPages,page:pageNo} 
 }
 
 export const fetchProductDetails = async(id:string)=>{

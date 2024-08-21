@@ -14,13 +14,13 @@ async function ProductContainer({category,search,layout,page}:{
   page?:string
 }) {
 
-  const {products,count,totalPages,page:currentPage,totalCount}:{products:ProductCardProps[],count:number,totalPages:number,page:number,totalCount:number} = await fetchProducts({
+  const {products,count,totalPages,page:currentPage}:{products:ProductCardProps[],count:number,totalPages:number,page:number} = await fetchProducts({
     category,search,page
   });
   
   return (
     <section> 
-        <Layout  productsLength = {totalCount} />
+        <Layout  productsLength = {count} />
 
        <div className='border-t-blue-100 mx-4 md:mx-8 border-t-[1px]'>
         {totalPages > 1 && <div className='mt-4 flex justify-end  mx-4 md:mx-8 '>
