@@ -1,6 +1,6 @@
 Full Stack Next.js 14 E-Commerce Project
 
-![Home Page](https://drive.google.com/drive/home/https://drive.google.com/file/d/1ZVCw99UNSQv60sodwzlHonbmxi-Jixnf/view?usp=sharing)
+![Home Page](https://drive.google.com/drive/u/0/my-drive/https://drive.google.com/file/d/1ZVCw99UNSQv60sodwzlHonbmxi-Jixnf/view?usp=sharing)
 
 Tech Stack Used:
 Next Js 14 
