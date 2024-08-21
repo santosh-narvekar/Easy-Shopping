@@ -12,18 +12,51 @@ import { type CategoryLabel } from "./types";
 
 export type Category = {
   label:CategoryLabel,
-  icon:IconType
+  icon:IconType,
+  subCategories:string[]
 }
 
 export const categories:Category[] = [
-  {label:'Electronics',icon:AiOutlineMobile},
-  {label:'Clothing',icon:FaTshirt},
-  {label:'Kitchen',icon:FaKitchenSet},
-  {label:'Books',icon:FaBook},
-  {label:'Sports',icon:FaBicycle},
-  {label:'Personal Care',icon:FaSpa},
-  {label:'Toys & Games',icon:FaGamepad},
-  {label:'Jewelry',icon:FaGem}
+  {
+   label:'Electronics',
+   icon:AiOutlineMobile,
+   subCategories:['Mobile Phones','Laptops','Headphones|Earphones','Cameras|Photography']
+  },
+  {
+    label:'Clothing',
+    icon:FaTshirt,
+    subCategories:['Mens Clothing','Womens Clothing','Kids Clothing','Accessories']
+  },
+  {
+   label:'Kitchen',
+   icon:FaKitchenSet,
+   subCategories:['Cookware','Small Appliances','Tableware','Kitchen Tools|Gadgets']
+  },
+  {
+    label:'Books',
+    icon:FaBook,
+    subCategories:['fiction','Non-Fiction','Childrens','Educational']
+  },
+  {
+    label:'Sports',
+    icon:FaBicycle,
+    subCategories:['Fitness','Outdoor','Team','Water']
+  },
+  {
+    label:'Personal Care',
+    icon:FaSpa,
+    subCategories:['Skincare','Haircare','Oral Care','Fragnances|Deodorants']
+  },
+  { 
+    label:'Toys & Games',
+    icon:FaGamepad,
+    subCategories:['Action Figures|Dolls','Board Games|Puzzles','Outdoor','Educational']
+  },
+  { 
+    label:'Jewelry',
+    icon:FaGem,
+    subCategories:['Necklaces|Pe ndants','Earrings','Rings','Bracelets|Bangles']
+  }
 ] 
 
 

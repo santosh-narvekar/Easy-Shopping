@@ -186,10 +186,27 @@ export const updateProductAction = async(prevState:any,formData:FormData):Promis
   redirect(`/products/${productId}`)
 }
 
-export const fetchProducts = async({search='',category}:{
-  search?:string,category?:string
-}) => {
+let limit = 1;
 
+export const fetchProducts = async({search='',category,page = '1'}:{
+  search?:string,category?:string,page?:string
+}) => {
+  let skip = (Number(page) - 1) * limit
+  if(category === '') category = undefined
+  console.log(skip); // 1
+  console.log(page); // 2
+  const count:number =  await db.product.count({
+    where:{
+      category,
+        OR:[
+        {product:{contains:search,mode:'insensitive'}},
+        {company:{contains:search,mode:'insensitive'}},
+        {productDesc:{contains:search,mode:'insensitive'}},
+      ]
+    }
+  });
+
+  if(search &&  count <= 1) skip = 0
   const products = await db.product.findMany({
     where:{
       category,
@@ -199,6 +216,8 @@ export const fetchProducts = async({search='',category}:{
         {productDesc:{contains:search,mode:'insensitive'}},
       ]
     },
+    skip,
+    take:limit,
     select:{
       id:true,
       product:true,
@@ -214,7 +233,17 @@ export const fetchProducts = async({search='',category}:{
     }
   })
 
-  return products
+  console.log(products);
+
+  const totalCount:number = await db.product.count({
+    where:{
+      category
+    }
+  });
+
+  const totalPages = Math.ceil(count/limit) 
+  let pageNo = Number(page)
+  return {products,count,totalPages,totalCount,page:pageNo} 
 }
 
 export const fetchProductDetails = async(id:string)=>{

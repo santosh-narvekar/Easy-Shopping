@@ -1,7 +1,7 @@
 'use client'
 import { usePathname, useSearchParams,useRouter } from "next/navigation"
 import { LuLayoutGrid, LuList } from "react-icons/lu"
-
+  
 function Layout({productsLength}:{productsLength:number}){
   const searchParams = useSearchParams();
   const pathname = usePathname();

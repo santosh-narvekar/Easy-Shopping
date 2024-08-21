@@ -4,21 +4,29 @@ import { type ProductCardProps } from '@/utils/types'
 import { fetchProducts } from '@/utils/actions'
 import EmptyList from '../global/EmptyList'
 import Layout from './Layout'
+import ButtonContainer from '../global/ButtonContainer'
+import { CardNumberElementComponent } from '@stripe/react-stripe-js'
 
-async function ProductContainer({category,search,layout}:{
+async function ProductContainer({category,search,layout,page}:{
   category?:string,
   search?:string,
   layout?:'grid' | 'list' 
+  page?:string
 }) {
 
-  const products:ProductCardProps[] = await fetchProducts({
-    category,search
+  const {products,count,totalPages,page:currentPage,totalCount}:{products:ProductCardProps[],count:number,totalPages:number,page:number,totalCount:number} = await fetchProducts({
+    category,search,page
   });
   
   return (
     <section> 
-        <Layout  productsLength = {products.length} />
+        <Layout  productsLength = {totalCount} />
+
        <div className='border-t-blue-100 mx-4 md:mx-8 border-t-[1px]'>
+        {totalPages > 1 && <div className='mt-4 flex justify-end  mx-4 md:mx-8 '>
+          <ButtonContainer page={currentPage} totalPages={totalPages}/>
+        </div>
+        }
         {
         
           products.length === 0 && <EmptyList heading="No results." message = 'Try changing or removing some of your filters' btnText="clear Filters" />
